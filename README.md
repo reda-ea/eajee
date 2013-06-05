@@ -3,9 +3,13 @@
 ## Temporary README
 
 This repo will contain a set of specialized, easy to extend Servlets, filters, etc.
+
 The goal is to make it extremely easy to write complex applications without the need for huge frameworks.
 
 ### Example
+
+Here's an example of the `ActionServlet`, which maps urls of the form `/action/p1/p2/...` 
+to calls for public methods of the form `doAction(String p1, String p2, ...)`
 
 ```java
 import eajee.http.ActionResponse;
@@ -16,13 +20,13 @@ import eajee.http.action.TextResponse;
 public class PhotoServlet extends ActionServlet {
   private static final long serialVersionUID = -219881991336474131L;
 
-	String IMAGE_FOLDER;
+	private String IMAGE_FOLDER = "...";
 
-	String getPictureTitle(String pictureId) {
+	private String getPictureTitle(String pictureId) {
 		...
 	}
 
-	String getPictureDescription(String pictureId) {
+	private String getPictureDescription(String pictureId) {
 		...
 	}
 
