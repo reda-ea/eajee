@@ -16,9 +16,6 @@ public class ActionServlet extends HttpServlet {
 	@Override
 	protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.out.println(req.getRequestURI());
-		System.out.println(req.getContextPath());
-		System.out.println(req.getServletPath());
 		String[] actionpath = req
 				.getRequestURI()
 				.substring(

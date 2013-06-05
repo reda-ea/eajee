@@ -28,6 +28,7 @@ public class FileResponse implements ActionResponse {
 		this.fileName = fileName;
 	}
 
+	// TODO any other possible characters ?
 	private static String basename(String path) {
 		int pos = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
 		return path.substring(pos + 1);
@@ -49,20 +50,8 @@ public class FileResponse implements ActionResponse {
 		int length = 0;
 		ServletOutputStream outStream = resp.getOutputStream();
 
-		// ServletContext context = this.getServletConfig().getServletContext();
-		// String mimetype = context.getMimeType(filePath);
-		//
-		// // sets response content type
-		// if (mimetype == null) {
-		// mimetype = "application/octet-stream";
-		// }
-
 		resp.setContentType(this.contentType);
 		resp.setContentLength((int) file.length());
-
-		// String fileName = (new File(filePath)).getName();
-		// resp.setHeader("Content-Disposition", "attachment; filename=\""
-		// + this.fileName + "\"");
 
 		resp.setHeader("Content-Disposition", "filename=\"" + this.fileName
 				+ "\"");
@@ -70,10 +59,8 @@ public class FileResponse implements ActionResponse {
 		byte[] byteBuffer = new byte[FileResponse.BUFSIZE];
 		DataInputStream in = new DataInputStream(new FileInputStream(file));
 
-		// reads the file's bytes and writes them to the response stream
-		while ((in != null) && ((length = in.read(byteBuffer)) != -1)) {
+		while ((in != null) && ((length = in.read(byteBuffer)) != -1))
 			outStream.write(byteBuffer, 0, length);
-		}
 
 		in.close();
 		outStream.close();
