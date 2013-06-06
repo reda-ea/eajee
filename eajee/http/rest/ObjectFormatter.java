@@ -22,9 +22,12 @@ public interface ObjectFormatter {
 	/**
 	 * Updates the provided object using the given parameters (what this means
 	 * is up to the implementation)
+	 * 
+	 * @throws IncompatibleObjectException
+	 *             if the Object can not be handled by this formattero
 	 */
 	Object updateObject(Object o, Map<String, String[]> parameters)
-			throws WrongParametersException;
+			throws WrongParametersException, IncompatibleObjectException;
 
 	/**
 	 * Provides the HTTP content type to indicate when returning an object
