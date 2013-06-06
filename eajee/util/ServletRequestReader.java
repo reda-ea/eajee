@@ -26,7 +26,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * Reads the whole request as a {@link String}.<br>
 	 * Only usable for text (not binary) queries
 	 */
-	public String readString(String charsetName) throws IOException {
+	public String readAll(String charsetName) throws IOException {
 		// TODO use encoding if available (as HTTP header)
 		@SuppressWarnings("resource")
 		java.util.Scanner s1 = (charsetName == null) ? new java.util.Scanner(
@@ -43,8 +43,8 @@ public final class ServletRequestReader extends BufferedReader {
 	 * Reads the whole request as a {@link String}.<br>
 	 * Only usable for text (not binary) queries
 	 */
-	public String readString() throws IOException {
-		return this.readString(null);
+	public String readAll() throws IOException {
+		return this.readAll(null);
 	}
 
 	// /////////////////////////////// AUTO GENERATED
