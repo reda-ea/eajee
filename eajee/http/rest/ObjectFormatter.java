@@ -1,22 +1,34 @@
 package eajee.http.rest;
 
+import java.io.PrintWriter;
 import java.util.Map;
 
 import eajee.error.IncompatibleObjectException;
 import eajee.error.MalformedDataException;
 import eajee.error.WrongParametersException;
+import eajee.util.ServletRequestReader;
 
 /**
- * In addition to overriding the default methods, any callable one argument
- * 'format*' named method will be preferred if it matches the object type.
+ * Able to format, build and update objects, usually of a single type/format.
  * 
  * @author Reda El Khattabi
  */
 public interface ObjectFormatter {
-	String formatObject(Object o) throws IncompatibleObjectException;
+	void writeObject(Object o, PrintWriter out)
+			throws IncompatibleObjectException;
 
-	Object buildObject(String s) throws MalformedDataException;
+	Object readObject(ServletRequestReader in) throws MalformedDataException;
 
+	/**
+	 * Updates the provided object using the given parameters (what this means
+	 * is up to the implementation)
+	 */
 	Object updateObject(Object o, Map<String, String[]> parameters)
 			throws WrongParametersException;
+
+	/**
+	 * Provides the HTTP content type to indicate when returning an object
+	 * formatted by this formatter.
+	 */
+	String getContentType();
 }
