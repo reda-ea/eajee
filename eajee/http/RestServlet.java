@@ -67,8 +67,6 @@ public abstract class RestServlet extends HttpServlet {
 		try {
 			os.storeObject(resource,
 					of.updateObject(os.retrieveObject(resource), parameters));
-			// this.storeObject(resource, this.updateObject(
-			// this.retrieveObject(resource), parameters));
 		} catch (NoSuchResourceException e) {
 			resp.sendError(404, resource);
 		} catch (WrongParametersException e) {
@@ -84,7 +82,6 @@ public abstract class RestServlet extends HttpServlet {
 		String resource = req.getRequestURI().substring(
 				req.getContextPath().length() + req.getServletPath().length());
 		try {
-			// this.deleteObject(resource);
 			this.getStore(req).deleteObject(resource);
 		} catch (NoSuchResourceException e) {
 			resp.sendError(404, resource);
