@@ -50,5 +50,12 @@ a description/comment of the picture (served as text/plain)
 
 ### more
 
+Another example is the `RestServlet`, used to easily create a REST web service, separating the 
+object management aspect (storing, retrieving, etc) from the Input/Output handling, so that the
+same actual resources can be presented in multiple ways (depending on the request).
+
+Starting by extending the `RestServlet` abstract class will pretty much force you through
+the right steps ... while I write a tutorial for it (soon).
+
 Other elements will be added once I reach a stable enough API, 
 current (UNSTABLE) code can be found on other branches (other than master).
