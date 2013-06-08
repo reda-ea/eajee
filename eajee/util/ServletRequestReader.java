@@ -2,6 +2,7 @@ package eajee.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.CharBuffer;
 
 import javax.servlet.ServletRequest;
@@ -12,14 +13,16 @@ public final class ServletRequestReader extends BufferedReader {
 
 	private BufferedReader reader;
 
-	private void setRequest(ServletRequest req) throws IOException {
-		this.request = req;
-		this.reader = req.getReader();
+	private BufferedReader getReader() throws IOException {
+		if (this.reader == null)
+			this.reader = this.request.getReader();
+		return this.reader;
 	}
 
 	public ServletRequestReader(ServletRequest req) throws IOException {
-		super(req.getReader());
-		this.setRequest(req);
+		super(new StringReader(""));
+		this.request = req;
+		this.reader = null;
 	}
 
 	/**
@@ -36,6 +39,7 @@ public final class ServletRequestReader extends BufferedReader {
 		String ret = s.hasNext() ? s.next() : "";
 		s.close();
 		s1.close();
+		this.reader = new BufferedReader(new StringReader(ret));
 		return ret;
 	}
 
@@ -54,7 +58,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#close()
 	 */
 	public void close() throws IOException {
-		reader.close();
+		this.getReader().close();
 	}
 
 	/**
@@ -63,7 +67,12 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
-		return reader.equals(obj);
+		try {
+			return this.getReader().equals(obj);
+		} catch (IOException e) {
+			return super.equals(obj);
+		}
+
 	}
 
 	/**
@@ -71,7 +80,11 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
-		return reader.hashCode();
+		try {
+			return this.getReader().hashCode();
+		} catch (IOException e) {
+			return super.hashCode();
+		}
 	}
 
 	/**
@@ -80,7 +93,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#mark(int)
 	 */
 	public void mark(int readAheadLimit) throws IOException {
-		reader.mark(readAheadLimit);
+		this.getReader().mark(readAheadLimit);
 	}
 
 	/**
@@ -88,7 +101,11 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#markSupported()
 	 */
 	public boolean markSupported() {
-		return reader.markSupported();
+		try {
+			return this.getReader().markSupported();
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	/**
@@ -97,7 +114,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#read()
 	 */
 	public int read() throws IOException {
-		return reader.read();
+		return this.getReader().read();
 	}
 
 	/**
@@ -109,7 +126,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#read(char[], int, int)
 	 */
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return reader.read(cbuf, off, len);
+		return this.getReader().read(cbuf, off, len);
 	}
 
 	/**
@@ -119,7 +136,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.Reader#read(char[])
 	 */
 	public int read(char[] cbuf) throws IOException {
-		return reader.read(cbuf);
+		return this.getReader().read(cbuf);
 	}
 
 	/**
@@ -129,7 +146,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.Reader#read(java.nio.CharBuffer)
 	 */
 	public int read(CharBuffer target) throws IOException {
-		return reader.read(target);
+		return this.getReader().read(target);
 	}
 
 	/**
@@ -138,7 +155,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#readLine()
 	 */
 	public String readLine() throws IOException {
-		return reader.readLine();
+		return this.getReader().readLine();
 	}
 
 	/**
@@ -147,7 +164,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#ready()
 	 */
 	public boolean ready() throws IOException {
-		return reader.ready();
+		return this.getReader().ready();
 	}
 
 	/**
@@ -155,7 +172,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#reset()
 	 */
 	public void reset() throws IOException {
-		reader.reset();
+		this.getReader().reset();
 	}
 
 	/**
@@ -165,7 +182,7 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.io.BufferedReader#skip(long)
 	 */
 	public long skip(long n) throws IOException {
-		return reader.skip(n);
+		return this.getReader().skip(n);
 	}
 
 	/**
@@ -173,7 +190,10 @@ public final class ServletRequestReader extends BufferedReader {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return reader.toString();
+		try {
+			return this.getReader().toString();
+		} catch (IOException e) {
+			return super.toString();
+		}
 	}
-
 }
