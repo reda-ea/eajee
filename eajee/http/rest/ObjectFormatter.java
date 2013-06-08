@@ -24,7 +24,7 @@ public interface ObjectFormatter {
 	 * is up to the implementation)
 	 * 
 	 * @throws IncompatibleObjectException
-	 *             if the Object can not be handled by this formattero
+	 *             if the Object can not be handled by this formatter
 	 */
 	Object updateObject(Object o, Map<String, String[]> parameters)
 			throws WrongParametersException, IncompatibleObjectException;
