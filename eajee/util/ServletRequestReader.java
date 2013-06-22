@@ -31,7 +31,6 @@ public final class ServletRequestReader extends BufferedReader {
 	 */
 	public String readAll(String charsetName) throws IOException {
 		// TODO use encoding if available (as HTTP header)
-		@SuppressWarnings("resource")
 		java.util.Scanner s1 = (charsetName == null) ? new java.util.Scanner(
 				this.request.getInputStream()) : new java.util.Scanner(
 				this.request.getInputStream(), charsetName);
