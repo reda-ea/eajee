@@ -3,27 +3,45 @@ package eajee.http;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ActionServlet extends HttpServlet {
+public abstract class ActionServlet extends HttpServlet {
 	private static final long serialVersionUID = -5436397904404462808L;
+
+	private static String[] removeEmptyStrings(String[] strings) {
+		List<String> ss = new ArrayList<String>();
+		for (String s : strings)
+			if (!s.isEmpty())
+				ss.add(s);
+		return ss.toArray(new String[0]);
+	}
 
 	@Override
 	protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String[] actionpath = req
+		String[] actionpath = ActionServlet.removeEmptyStrings(req
 				.getRequestURI()
 				.substring(
 						req.getContextPath().length()
-								+ req.getServletPath().length() + 1).split("/");
-		Method m = this.find_action_method(actionpath);
-		ActionResponse aResp = this.call_action_method(m, actionpath);
-		aResp.doResponse(req, resp);
+								+ req.getServletPath().length()).split("/"));
+		try {
+			Method m = this.find_action_method(actionpath);
+			ActionResponse aResp = this.call_action_method(m, actionpath);
+			aResp.doResponse(req, resp);
+		} catch (NoSuchMethodError e) {
+			try {
+				this.defaultAction(actionpath).doResponse(req, resp);
+			} catch (Throwable e1) {
+				throw new ServletException(e1);
+			}
+		}
 	}
 
 	@Override
@@ -35,7 +53,10 @@ public class ActionServlet extends HttpServlet {
 	private static final String ACTION_METHOD_PREFIX = "do";
 
 	// TODO support annotations
-	private Method find_action_method(String[] actionpath) {
+	private Method find_action_method(String[] actionpath)
+			throws NoSuchMethodError {
+		if (actionpath.length == 0)
+			throw new NoSuchMethodError();
 		for (Method m : this.getClass().getMethods()) {
 			if (!m.getName().equalsIgnoreCase(
 					ActionServlet.ACTION_METHOD_PREFIX + actionpath[0]))
@@ -79,5 +100,8 @@ public class ActionServlet extends HttpServlet {
 		return (Object[]) Arrays.copyOfRange(actionpath, 1,
 				m.getParameterTypes().length + 1);
 	}
+
+	protected abstract ActionResponse defaultAction(String... arguments)
+			throws Throwable;
 
 }
